@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -42,8 +43,15 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.query(sql, param, scheduleRowMapper());
     }
 
+    @Override
+    public Schedule find(Long scheduleId) {
+        String sql = "SELECT id, username, task, created_at, updated_at FROM schedule where id = :id";
+        Map<String, Object> param = Map.of("id", scheduleId);
+        return jdbcTemplate.queryForObject(sql, param, scheduleRowMapper());
+    }
+
     private String createSearchQuery(ScheduleSearchCond cond) {
-        String sql = "SELECT * FROM schedule";
+        String sql = "SELECT id, username, task, created_at, updated_at FROM schedule";
         if (cond.updatedAt() != null || StringUtils.hasText(cond.username())) {
             sql += " WHERE";
         }

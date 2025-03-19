@@ -35,4 +35,12 @@ public class ScheduleController {
         FindSchedulesResponse res = scheduleService.findSchedules(cond);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponse> findSchedule(
+            @PathVariable Long scheduleId
+    ) {
+        ScheduleResponse res = scheduleService.findSchedule(scheduleId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

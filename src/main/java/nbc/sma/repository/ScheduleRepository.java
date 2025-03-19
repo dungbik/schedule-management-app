@@ -10,4 +10,6 @@ public interface ScheduleRepository {
     Schedule save(Schedule schedule);
 
     List<Schedule> findAll(ScheduleSearchCond cond);
+
+    Schedule find(Long scheduleId);
 }

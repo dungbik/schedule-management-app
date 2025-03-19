@@ -30,4 +30,10 @@ public class ScheduleService {
 
         return scheduleMapper.toResponse(results);
     }
+
+    public ScheduleResponse findSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.find(scheduleId);
+
+        return scheduleMapper.toResponse(schedule);
+    }
 }

@@ -10,3 +10,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/schedules?updatedAt=2025-03-19&username=테스트
+
+###
+GET http://localhost:8080/schedules/1
