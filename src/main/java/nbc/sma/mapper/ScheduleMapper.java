@@ -1,11 +1,13 @@
 package nbc.sma.mapper;
 
 import nbc.sma.controller.request.CreateScheduleRequest;
-import nbc.sma.controller.response.CreateScheduleResponse;
+import nbc.sma.controller.response.FindSchedulesResponse;
+import nbc.sma.controller.response.ScheduleResponse;
 import nbc.sma.entity.Schedule;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class ScheduleMapper {
@@ -20,7 +22,11 @@ public class ScheduleMapper {
                 .build();
     }
 
-    public CreateScheduleResponse toResponse(Long scheduleId, Schedule schedule) {
-        return new CreateScheduleResponse(scheduleId, schedule.getUsername(), schedule.getTask(), schedule.getCreatedAt(), schedule.getUpdatedAt());
+    public ScheduleResponse toResponse(Schedule schedule) {
+        return new ScheduleResponse(schedule.getId(), schedule.getUsername(), schedule.getTask(), schedule.getCreatedAt(), schedule.getUpdatedAt());
+    }
+
+    public FindSchedulesResponse toResponse(List<Schedule> results) {
+        return new FindSchedulesResponse(results.stream().map(this::toResponse).toList(), results.size());
     }
 }

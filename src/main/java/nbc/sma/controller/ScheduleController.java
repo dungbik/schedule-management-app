@@ -2,16 +2,17 @@ package nbc.sma.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nbc.sma.controller.request.CreateScheduleRequest;
-import nbc.sma.controller.response.CreateScheduleResponse;
+import nbc.sma.controller.request.ScheduleSearchCond;
+import nbc.sma.controller.response.ScheduleResponse;
+import nbc.sma.controller.response.FindSchedulesResponse;
 import nbc.sma.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/schedules")
@@ -20,10 +21,18 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<CreateScheduleResponse> createSchedule(
+    public ResponseEntity<ScheduleResponse> createSchedule(
             @Valid @RequestBody CreateScheduleRequest req
     ) {
-        CreateScheduleResponse res = scheduleService.createSchedule(req);
+        ScheduleResponse res = scheduleService.createSchedule(req);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<FindSchedulesResponse> findSchedules(
+            @ModelAttribute ScheduleSearchCond cond
+    ) {
+        FindSchedulesResponse res = scheduleService.findSchedules(cond);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

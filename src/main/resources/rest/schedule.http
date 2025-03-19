@@ -1,3 +1,4 @@
+###
 POST http://localhost:8080/schedules
 Content-Type: application/json
 
@@ -6,3 +7,6 @@ Content-Type: application/json
   "password": "테스트 비밀번호",
   "task": "테스트 할 일"
 }
+
+###
+GET http://localhost:8080/schedules?updatedAt=2025-03-19&username=테스트

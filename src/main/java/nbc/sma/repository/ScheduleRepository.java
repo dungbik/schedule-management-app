@@ -1,8 +1,13 @@
 package nbc.sma.repository;
 
+import nbc.sma.controller.request.ScheduleSearchCond;
 import nbc.sma.entity.Schedule;
+
+import java.util.List;
 
 public interface ScheduleRepository {
 
-    Long save(Schedule schedule);
+    Schedule save(Schedule schedule);
+
+    List<Schedule> findAll(ScheduleSearchCond cond);
 }

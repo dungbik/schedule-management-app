@@ -2,7 +2,7 @@ package nbc.sma.controller.response;
 
 import java.time.LocalDateTime;
 
-public record CreateScheduleResponse(
+public record ScheduleResponse(
         Long scheduleId,
         String username,
         String task,
