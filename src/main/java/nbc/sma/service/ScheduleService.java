@@ -12,6 +12,7 @@ import nbc.sma.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -39,6 +40,16 @@ public class ScheduleService {
     }
 
     public void editSchedule(Long scheduleId, EditScheduleRequest req) {
+
+        Schedule schedule = scheduleRepository.find(scheduleId);
+        if (schedule == null) {
+            throw new RuntimeException("존재하지 않는 일정입니다.");
+        }
+
+        if (!Objects.equals(schedule.getPassword(), req.password())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
         scheduleRepository.update(scheduleId, req);
     }
 

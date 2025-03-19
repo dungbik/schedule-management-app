@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Schedule {
     private Long id;
-    private String username;
+    private Long userId;
     private String password;
     private String task;
     private LocalDateTime createdAt;
