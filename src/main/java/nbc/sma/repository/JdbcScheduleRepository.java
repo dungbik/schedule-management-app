@@ -61,7 +61,7 @@ public class JdbcScheduleRepository implements ScheduleRepository {
 
     @Override
     public ScheduleResponse findResponse(Long scheduleId) {
-        String sql = "SELECT s.id, u.email, u.name, task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id WHERE s.id = :id";
+        String sql = "SELECT s.id, u.id, u.email, u.name, task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id WHERE s.id = :id";
         Map<String, Object> param = Map.of("id", scheduleId);
         try {
             return jdbcTemplate.queryForObject(sql, param, scheduleResponseRowMapper());
@@ -120,7 +120,7 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         return ((rs, rowNum) -> {
             ScheduleResponse response = new ScheduleResponse();
             response.setScheduleId(rs.getLong("s.id"));
-            response.setUser(new UserResponse(rs.getString("u.email"), rs.getString("u.name")));
+            response.setUser(new UserResponse(rs.getLong("u.id"), rs.getString("u.email"), rs.getString("u.name")));
             response.setTask(rs.getString("s.task"));
             response.setCreatedAt(rs.getTimestamp("s.created_at").toLocalDateTime());
             response.setUpdatedAt(rs.getTimestamp("s.updated_at").toLocalDateTime());
