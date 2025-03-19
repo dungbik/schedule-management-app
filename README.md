@@ -20,7 +20,11 @@ Rest Docs + Swagger 를 통해 API 를 테스트 할 수 있으며 API 문서를
 📂 nbc
 └── 📂 sma
     ├── 📂 controller                
-    │   ├── 📂 request               
+    │   ├── 📂 request        
+    │   │   ├── 📄 CreateScheduleRequest
+    │   │   ├── 📄 EditScheduleRequest
+    │   │   └── 📄 RegisterRequest
+    │   │   └── 📄 ScheduleSearchCond
     │   ├── 📂 response              
     │   │   ├── 📄 FindSchedulesResponse
     │   │   ├── 📄 ScheduleResponse
