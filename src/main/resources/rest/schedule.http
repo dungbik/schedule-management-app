@@ -1,0 +1,8 @@
+POST http://localhost:8080/schedules
+Content-Type: application/json
+
+{
+  "username": "테스트 이름",
+  "password": "테스트 비밀번호",
+  "task": "테스트 할 일"
+}
