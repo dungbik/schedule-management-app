@@ -68,6 +68,15 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         jdbcTemplate.update(sql, param);
     }
 
+    @Override
+    public void delete(Long scheduleId) {
+        String sql = "DELETE FROM schedule WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", scheduleId);
+
+        jdbcTemplate.update(sql, param);
+    }
+
     private String createSearchQuery(ScheduleSearchCond cond) {
         String sql = "SELECT id, username, task, created_at, updated_at FROM schedule";
         if (cond.updatedAt() != null || StringUtils.hasText(cond.username())) {

@@ -41,4 +41,8 @@ public class ScheduleService {
     public void editSchedule(Long scheduleId, EditScheduleRequest req) {
         scheduleRepository.update(scheduleId, req);
     }
+
+    public void deleteSchedule(Long scheduleId) {
+        scheduleRepository.delete(scheduleId);
+    }
 }

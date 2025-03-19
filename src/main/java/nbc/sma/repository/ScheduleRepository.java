@@ -15,4 +15,6 @@ public interface ScheduleRepository {
     Schedule find(Long scheduleId);
 
     void update(Long scheduleId, EditScheduleRequest req);
+
+    void delete(Long scheduleId);
 }
