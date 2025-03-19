@@ -5,6 +5,7 @@ import nbc.sma.controller.request.ScheduleSearchCond;
 import nbc.sma.controller.response.ScheduleResponse;
 import nbc.sma.controller.response.UserResponse;
 import nbc.sma.entity.Schedule;
+import nbc.sma.exception.custom.NotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -65,7 +66,7 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         try {
             return jdbcTemplate.queryForObject(sql, param, scheduleResponseRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("존재하지 않는 일정입니다.");
+            throw new NotFoundException("존재하지 않는 일정입니다.");
         }
     }
 

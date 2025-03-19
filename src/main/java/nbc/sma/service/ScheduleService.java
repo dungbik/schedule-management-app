@@ -8,6 +8,8 @@ import nbc.sma.controller.response.ScheduleResponse;
 import nbc.sma.controller.response.FindSchedulesResponse;
 import nbc.sma.entity.Schedule;
 import nbc.sma.entity.User;
+import nbc.sma.exception.custom.InvalidPasswordException;
+import nbc.sma.exception.custom.NotFoundException;
 import nbc.sma.mapper.ScheduleMapper;
 import nbc.sma.mapper.UserMapper;
 import nbc.sma.repository.ScheduleRepository;
@@ -28,7 +30,7 @@ public class ScheduleService {
     public ScheduleResponse createSchedule(CreateScheduleRequest req) {
         User user = userService.find(req.userId());
         if (user == null) {
-            throw new RuntimeException("존재하지 않는 사용자입니다.");
+            throw new NotFoundException("존재하지 않는 사용자입니다.");
         }
 
         Schedule schedule = scheduleMapper.toEntity(req);
@@ -51,11 +53,11 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.find(scheduleId);
         if (schedule == null) {
-            throw new RuntimeException("존재하지 않는 일정입니다.");
+            throw new NotFoundException("존재하지 않는 일정입니다.");
         }
 
         if (!Objects.equals(schedule.getPassword(), req.password())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new InvalidPasswordException();
         }
 
         userService.editName(schedule.getUserId(), req.username());
