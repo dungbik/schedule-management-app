@@ -40,8 +40,13 @@ public class JdbcScheduleRepository implements ScheduleRepository {
 
     @Override
     public List<ScheduleResponse> findAllResponse(ScheduleSearchCond cond) {
-        SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
         String sql = createSearchQuery(cond);
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("updatedAt", cond.getUpdatedAt())
+                .addValue("username", cond.getUsername())
+                .addValue("userId", cond.getUserId())
+                .addValue("limit", cond.getSize())
+                .addValue("offset", (cond.getPage() - 1) * cond.getSize());
 
         return jdbcTemplate.query(sql, param, scheduleResponseRowMapper());
     }
@@ -90,19 +95,19 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     private String createSearchQuery(ScheduleSearchCond cond) {
         String sql = "SELECT DISTINCT s.id, u.email, u.name, s.task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id";
 
-        if (StringUtils.hasText(cond.username())) {
+        if (StringUtils.hasText(cond.getUsername())) {
             sql += " AND u.name like concat('%', :username, '%')";
         }
 
-        if (cond.updatedAt() != null) {
+        if (cond.getUpdatedAt() != null) {
             sql += " WHERE DATE(s.updated_at) = :updatedAt";
         }
 
-        if (cond.userId() != null) {
+        if (cond.getUserId() != null) {
             sql += " AND s.user_id = :userId";
         }
 
-        sql += " ORDER BY s.updated_at DESC";
+        sql += " ORDER BY s.updated_at DESC LIMIT :limit OFFSET :offset";
         return sql;
     }
 

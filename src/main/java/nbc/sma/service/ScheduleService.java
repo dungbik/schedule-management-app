@@ -40,7 +40,7 @@ public class ScheduleService {
     public FindSchedulesResponse findSchedules(ScheduleSearchCond cond) {
         List<ScheduleResponse> results = scheduleRepository.findAllResponse(cond);
 
-        return scheduleMapper.toResponse(results);
+        return new FindSchedulesResponse(results, results.size(), cond.getPage());
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
