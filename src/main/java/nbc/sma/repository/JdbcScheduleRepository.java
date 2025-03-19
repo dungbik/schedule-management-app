@@ -1,11 +1,13 @@
 package nbc.sma.repository;
 
 import lombok.RequiredArgsConstructor;
+import nbc.sma.controller.request.EditScheduleRequest;
 import nbc.sma.controller.request.ScheduleSearchCond;
 import nbc.sma.entity.Schedule;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +51,21 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         String sql = "SELECT id, username, task, created_at, updated_at FROM schedule where id = :id";
         Map<String, Object> param = Map.of("id", scheduleId);
         return jdbcTemplate.queryForObject(sql, param, scheduleRowMapper());
+    }
+
+    @Override
+    public void update(Long scheduleId, EditScheduleRequest req) {
+        String sql = "UPDATE schedule " +
+                "SET username=:username, task=:task, updated_at=:updatedAt " +
+                "WHERE id=:id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("username", req.username())
+                .addValue("task", req.task())
+                .addValue("updatedAt", LocalDateTime.now())
+                .addValue("id", scheduleId);
+
+        jdbcTemplate.update(sql, param);
     }
 
     private String createSearchQuery(ScheduleSearchCond cond) {

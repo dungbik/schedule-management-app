@@ -13,3 +13,12 @@ GET http://localhost:8080/schedules?updatedAt=2025-03-19&username=테스트
 
 ###
 GET http://localhost:8080/schedules/1
+
+###
+PUT http://localhost:8080/schedules/1/edit
+Content-Type: application/json
+
+{
+  "username": "테스트 이름",
+  "task": "테스트 할 일 수정"
+}

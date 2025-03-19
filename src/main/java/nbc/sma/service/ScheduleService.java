@@ -2,6 +2,7 @@ package nbc.sma.service;
 
 import lombok.RequiredArgsConstructor;
 import nbc.sma.controller.request.CreateScheduleRequest;
+import nbc.sma.controller.request.EditScheduleRequest;
 import nbc.sma.controller.request.ScheduleSearchCond;
 import nbc.sma.controller.response.ScheduleResponse;
 import nbc.sma.controller.response.FindSchedulesResponse;
@@ -35,5 +36,9 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.find(scheduleId);
 
         return scheduleMapper.toResponse(schedule);
+    }
+
+    public void editSchedule(Long scheduleId, EditScheduleRequest req) {
+        scheduleRepository.update(scheduleId, req);
     }
 }
