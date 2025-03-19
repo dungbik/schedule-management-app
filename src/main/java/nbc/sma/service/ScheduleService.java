@@ -7,7 +7,9 @@ import nbc.sma.controller.request.ScheduleSearchCond;
 import nbc.sma.controller.response.ScheduleResponse;
 import nbc.sma.controller.response.FindSchedulesResponse;
 import nbc.sma.entity.Schedule;
+import nbc.sma.entity.User;
 import nbc.sma.mapper.ScheduleMapper;
+import nbc.sma.mapper.UserMapper;
 import nbc.sma.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,23 +22,29 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     public ScheduleResponse createSchedule(CreateScheduleRequest req) {
-        Schedule schedule = scheduleRepository.save(scheduleMapper.toEntity(req));
+        User user = userService.find(req.userId());
+        if (user == null) {
+            throw new RuntimeException("존재하지 않는 사용자입니다.");
+        }
 
-        return scheduleMapper.toResponse(schedule);
+        Schedule schedule = scheduleMapper.toEntity(req);
+        scheduleRepository.save(schedule);
+
+        return new ScheduleResponse(schedule.getId(), userMapper.toResponse(user), schedule.getTask(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
     public FindSchedulesResponse findSchedules(ScheduleSearchCond cond) {
-        List<Schedule> results = scheduleRepository.findAll(cond);
+        List<ScheduleResponse> results = scheduleRepository.findAllResponse(cond);
 
         return scheduleMapper.toResponse(results);
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.find(scheduleId);
-
-        return scheduleMapper.toResponse(schedule);
+        return scheduleRepository.findResponse(scheduleId);
     }
 
     public void editSchedule(Long scheduleId, EditScheduleRequest req) {
@@ -50,7 +58,8 @@ public class ScheduleService {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        scheduleRepository.update(scheduleId, req);
+        userService.editName(schedule.getUserId(), req.username());
+        scheduleRepository.update(scheduleId, req.task());
     }
 
     public void deleteSchedule(Long scheduleId) {

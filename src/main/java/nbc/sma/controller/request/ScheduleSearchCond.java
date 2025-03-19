@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public record ScheduleSearchCond(
         LocalDate updatedAt,
-        String username
+        String username,
+        Long userId
 ) {
 }

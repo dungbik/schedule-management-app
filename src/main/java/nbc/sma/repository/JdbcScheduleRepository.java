@@ -1,9 +1,11 @@
 package nbc.sma.repository;
 
 import lombok.RequiredArgsConstructor;
-import nbc.sma.controller.request.EditScheduleRequest;
 import nbc.sma.controller.request.ScheduleSearchCond;
+import nbc.sma.controller.response.ScheduleResponse;
+import nbc.sma.controller.response.UserResponse;
 import nbc.sma.entity.Schedule;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -26,42 +28,50 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public Schedule save(Schedule schedule) {
-        String sql = "INSERT INTO schedule (username, password, task, created_at, updated_at) VALUES (:username, :password, :task, :createdAt, :updatedAt)";
+    public void save(Schedule schedule) {
+        String sql = "INSERT INTO schedule (user_id, password, task, created_at, updated_at) VALUES (:userId, :password, :task, :createdAt, :updatedAt)";
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(schedule);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, params, keyHolder);
 
         schedule.setId(keyHolder.getKey().longValue());
-
-        return schedule;
     }
 
     @Override
-    public List<Schedule> findAll(ScheduleSearchCond cond) {
+    public List<ScheduleResponse> findAllResponse(ScheduleSearchCond cond) {
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
         String sql = createSearchQuery(cond);
 
-        return jdbcTemplate.query(sql, param, scheduleRowMapper());
+        return jdbcTemplate.query(sql, param, scheduleResponseRowMapper());
     }
 
     @Override
     public Schedule find(Long scheduleId) {
-        String sql = "SELECT id, username, task, created_at, updated_at FROM schedule where id = :id";
-        Map<String, Object> param = Map.of("id", scheduleId);
+        String sql = "SELECT id, user_id, password, task, created_at, updated_at FROM schedule WHERE id = :scheduleId";
+        Map<String, Object> param = Map.of("scheduleId", scheduleId);
         return jdbcTemplate.queryForObject(sql, param, scheduleRowMapper());
     }
 
     @Override
-    public void update(Long scheduleId, EditScheduleRequest req) {
+    public ScheduleResponse findResponse(Long scheduleId) {
+        String sql = "SELECT s.id, u.email, u.name, task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id WHERE s.id = :id";
+        Map<String, Object> param = Map.of("id", scheduleId);
+        try {
+            return jdbcTemplate.queryForObject(sql, param, scheduleResponseRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("존재하지 않는 일정입니다.");
+        }
+    }
+
+    @Override
+    public void update(Long scheduleId, String task) {
         String sql = "UPDATE schedule " +
-                "SET username=:username, task=:task, updated_at=:updatedAt " +
+                "SET task=:task, updated_at=:updatedAt " +
                 "WHERE id=:id";
 
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("username", req.username())
-                .addValue("task", req.task())
+                .addValue("task", task)
                 .addValue("updatedAt", LocalDateTime.now())
                 .addValue("id", scheduleId);
 
@@ -78,27 +88,37 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     }
 
     private String createSearchQuery(ScheduleSearchCond cond) {
-        String sql = "SELECT id, username, task, created_at, updated_at FROM schedule";
-        if (cond.updatedAt() != null || StringUtils.hasText(cond.username())) {
-            sql += " WHERE";
+        String sql = "SELECT DISTINCT s.id, u.email, u.name, s.task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id";
+
+        if (StringUtils.hasText(cond.username())) {
+            sql += " AND u.name like concat('%', :username, '%')";
         }
 
         if (cond.updatedAt() != null) {
-            sql += " DATE(updated_at) = :updatedAt";
+            sql += " WHERE DATE(s.updated_at) = :updatedAt";
         }
 
-        if (StringUtils.hasText(cond.username())) {
-            if (cond.updatedAt() != null) {
-                sql += " AND";
-            }
-            sql += " username like concat('%', :username, '%')";
+        if (cond.userId() != null) {
+            sql += " AND s.user_id = :userId";
         }
 
-        sql += " ORDER BY updated_at DESC";
+        sql += " ORDER BY s.updated_at DESC";
         return sql;
     }
 
     private RowMapper<Schedule> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
+    }
+
+    private RowMapper<ScheduleResponse> scheduleResponseRowMapper() {
+        return ((rs, rowNum) -> {
+            ScheduleResponse response = new ScheduleResponse();
+            response.setScheduleId(rs.getLong("s.id"));
+            response.setUser(new UserResponse(rs.getString("u.email"), rs.getString("u.name")));
+            response.setTask(rs.getString("s.task"));
+            response.setCreatedAt(rs.getTimestamp("s.created_at").toLocalDateTime());
+            response.setUpdatedAt(rs.getTimestamp("s.updated_at").toLocalDateTime());
+            return response;
+        });
     }
 }

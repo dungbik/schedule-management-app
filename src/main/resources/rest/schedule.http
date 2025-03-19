@@ -3,25 +3,36 @@ POST http://localhost:8080/schedules
 Content-Type: application/json
 
 {
-  "username": "테스트 이름",
+  "userId": 5,
   "password": "테스트 비밀번호",
   "task": "테스트 할 일"
 }
 
 ###
-GET http://localhost:8080/schedules?updatedAt=2025-03-19&username=테스트
+GET http://localhost:8080/schedules?updatedAt=2025-03-19
+#GET http://localhost:8080/schedules?updatedAt=2025-03-19&username=테스트
 
 ###
-GET http://localhost:8080/schedules/1
+GET http://localhost:8080/schedules/6
 
 ###
-PUT http://localhost:8080/schedules/1/edit
+PUT http://localhost:8080/schedules/6/edit
 Content-Type: application/json
 
 {
-  "username": "테스트 이름",
-  "task": "테스트 할 일 수정"
+  "username": "테스트 이름 수정",
+  "task": "테스트 할 일 수정",
+  "password": "테스트 비밀번호"
 }
 
 ###
-DELETE http://localhost:8080/schedules/1
+DELETE http://localhost:8080/schedules/5
+
+###
+POST http://localhost:8080/users/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "name": "테스트 계정"
+}

@@ -14,7 +14,7 @@ public class ScheduleMapper {
 
     public Schedule toEntity(CreateScheduleRequest req) {
         return Schedule.builder()
-                .username(req.username())
+                .userId(req.userId())
                 .password(req.password())
                 .task(req.task())
                 .createdAt(LocalDateTime.now())
@@ -22,11 +22,7 @@ public class ScheduleMapper {
                 .build();
     }
 
-    public ScheduleResponse toResponse(Schedule schedule) {
-        return new ScheduleResponse(schedule.getId(), schedule.getUsername(), schedule.getTask(), schedule.getCreatedAt(), schedule.getUpdatedAt());
-    }
-
-    public FindSchedulesResponse toResponse(List<Schedule> results) {
-        return new FindSchedulesResponse(results.stream().map(this::toResponse).toList(), results.size());
+    public FindSchedulesResponse toResponse(List<ScheduleResponse> results) {
+        return new FindSchedulesResponse(results, results.size());
     }
 }
