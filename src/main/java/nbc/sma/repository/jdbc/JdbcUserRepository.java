@@ -62,7 +62,7 @@ public class JdbcUserRepository implements UserRepository {
      * @return userId 에 해당하는 사용자 정보
      */
     @Override
-    public User find(Long userId) {
+    public User findById(Long userId) {
         String sql = "SELECT id, email, name, created_at, updated_at FROM user WHERE id = :userId";
         Map<String, Object> param = Map.of("userId", userId);
         return jdbcTemplate.queryForObject(sql, param, userRowMapper());

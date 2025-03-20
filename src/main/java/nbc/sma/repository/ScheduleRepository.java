@@ -12,11 +12,11 @@ public interface ScheduleRepository {
 
     List<ScheduleResponse> findAllResponse(ScheduleSearchCond cond);
 
-    Schedule find(Long scheduleId);
+    Schedule findById(Long scheduleId);
 
     ScheduleResponse findResponse(Long scheduleId);
 
     void update(Long scheduleId, String task);
 
-    void delete(Long scheduleId);
+    void deleteById(Long scheduleId);
 }

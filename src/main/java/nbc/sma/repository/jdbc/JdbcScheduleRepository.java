@@ -68,7 +68,7 @@ public class JdbcScheduleRepository implements ScheduleRepository {
      * @return id가 scheduleId에 해당하는 일정 정보
      */
     @Override
-    public Schedule find(Long scheduleId) {
+    public Schedule findById(Long scheduleId) {
         String sql = "SELECT id, user_id, password, task, created_at, updated_at FROM schedule WHERE id = :scheduleId";
         Map<String, Object> param = Map.of("scheduleId", scheduleId);
         return jdbcTemplate.queryForObject(sql, param, scheduleRowMapper());
@@ -114,7 +114,7 @@ public class JdbcScheduleRepository implements ScheduleRepository {
      * @param scheduleId 일정 id
      */
     @Override
-    public void delete(Long scheduleId) {
+    public void deleteById(Long scheduleId) {
         String sql = "DELETE FROM schedule WHERE id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", scheduleId);

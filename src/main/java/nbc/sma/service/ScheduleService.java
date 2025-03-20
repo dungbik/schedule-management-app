@@ -51,7 +51,7 @@ public class ScheduleService {
 
     public void editSchedule(Long scheduleId, EditScheduleRequest req) {
 
-        Schedule schedule = scheduleRepository.find(scheduleId);
+        Schedule schedule = scheduleRepository.findById(scheduleId);
         if (schedule == null) {
             throw new NotFoundException("존재하지 않는 일정입니다.");
         }
@@ -65,6 +65,6 @@ public class ScheduleService {
     }
 
     public void deleteSchedule(Long scheduleId) {
-        scheduleRepository.delete(scheduleId);
+        scheduleRepository.deleteById(scheduleId);
     }
 }

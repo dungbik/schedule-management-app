@@ -27,6 +27,6 @@ public class UserService {
     }
 
     public User find(Long userId) {
-        return userRepository.find(userId);
+        return userRepository.findById(userId);
     }
 }

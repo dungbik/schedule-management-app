@@ -7,5 +7,5 @@ public interface UserRepository {
 
     void update(Long userId, String name);
 
-    User find(Long userId);
+    User findById(Long userId);
 }
