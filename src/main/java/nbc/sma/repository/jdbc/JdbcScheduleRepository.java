@@ -29,6 +29,10 @@ public class JdbcScheduleRepository implements ScheduleRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    /**
+     * 일정 엔티티를 저장하고 저장된 id를 넣어준다.
+     * @param schedule 일정 엔티티
+     */
     @Override
     public void save(Schedule schedule) {
         String sql = "INSERT INTO schedule (user_id, password, task, created_at, updated_at) VALUES (:userId, :password, :task, :createdAt, :updatedAt)";
@@ -40,6 +44,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         schedule.setId(keyHolder.getKey().longValue());
     }
 
+    /**
+     * 검색을 수행하여 해당하는 일정 정보 목록을 반환한다.
+     * @param cond 검색 조건
+     * @return 검색 조건에 해당하는 일정 정보 목록
+     */
     @Override
     public List<ScheduleResponse> findAllResponse(ScheduleSearchCond cond) {
         String sql = createSearchQuery(cond);
@@ -53,6 +62,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.query(sql, param, scheduleResponseRowMapper());
     }
 
+    /**
+     * scheduleId 에 해당하는 일정 정보를 반환한다.
+     * @param scheduleId 일정 id
+     * @return id가 scheduleId에 해당하는 일정 정보
+     */
     @Override
     public Schedule find(Long scheduleId) {
         String sql = "SELECT id, user_id, password, task, created_at, updated_at FROM schedule WHERE id = :scheduleId";
@@ -60,6 +74,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.queryForObject(sql, param, scheduleRowMapper());
     }
 
+    /**
+     * scheduleId 에 해당하며 작성자 정보가 포함된 일정 정보를 반환한다.
+     * @param scheduleId 일정 id
+     * @return id가 scheduleId에 해당하는 작성자 정보가 포한된 일정 정보
+     */
     @Override
     public ScheduleResponse findResponse(Long scheduleId) {
         String sql = "SELECT s.id, u.id, u.email, u.name, task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id WHERE s.id = :id";
@@ -71,6 +90,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         }
     }
 
+    /**
+     * scheduleId 에 해당하는 일정의 할 일 내용을 수정한다.
+     * @param scheduleId 일정 id
+     * @param task 할 일
+     */
     @Override
     public void update(Long scheduleId, String task) {
         String sql = "UPDATE schedule " +
@@ -85,6 +109,10 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         jdbcTemplate.update(sql, param);
     }
 
+    /**
+     * scheduleId 에 해당하는 일정을 삭제한다.
+     * @param scheduleId 일정 id
+     */
     @Override
     public void delete(Long scheduleId) {
         String sql = "DELETE FROM schedule WHERE id = :id";
@@ -94,6 +122,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         jdbcTemplate.update(sql, param);
     }
 
+    /**
+     * 검색 쿼리를 동적으로 생성
+     * @param cond 검색 조건
+     * @return 검색을 수행하는 쿼리문
+     */
     private String createSearchQuery(ScheduleSearchCond cond) {
         String sql = "SELECT DISTINCT s.id, u.email, u.name, s.task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id";
 
@@ -113,10 +146,18 @@ public class JdbcScheduleRepository implements ScheduleRepository {
         return sql;
     }
 
+    /**
+     * 일정 정보를 만드는 Mapper
+     * @return 일정 정보를 만드는 Mapper
+     */
     private RowMapper<Schedule> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
     }
 
+    /**
+     * 작성자 정보를 포함한 일정 정보를 만드는 Mapper
+     * @return 작성자 정보를 포함한 일정 정보를 만드는 Mapper
+     */
     private RowMapper<ScheduleResponse> scheduleResponseRowMapper() {
         return ((rs, rowNum) -> {
             ScheduleResponse response = new ScheduleResponse();
