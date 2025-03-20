@@ -1,6 +1,5 @@
 package nbc.sma.exception;
 
-import nbc.sma.exception.custom.BizException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package nbc.sma.controller.request;
+package nbc.sma.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

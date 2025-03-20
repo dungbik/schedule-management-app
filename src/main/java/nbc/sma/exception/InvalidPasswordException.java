@@ -1,4 +1,4 @@
-package nbc.sma.exception.custom;
+package nbc.sma.exception;
 
 import org.springframework.http.HttpStatus;
 

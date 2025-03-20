@@ -1,10 +1,10 @@
 package nbc.sma.service;
 
 import lombok.RequiredArgsConstructor;
-import nbc.sma.controller.request.RegisterRequest;
-import nbc.sma.controller.response.UserResponse;
+import nbc.sma.dto.request.RegisterRequest;
+import nbc.sma.dto.response.UserResponse;
 import nbc.sma.entity.User;
-import nbc.sma.mapper.UserMapper;
+import nbc.sma.dto.mapper.UserMapper;
 import nbc.sma.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

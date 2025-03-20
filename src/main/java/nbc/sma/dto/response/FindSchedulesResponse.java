@@ -1,4 +1,4 @@
-package nbc.sma.controller.response;
+package nbc.sma.dto.response;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package nbc.sma.exception.custom;
+package nbc.sma.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

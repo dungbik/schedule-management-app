@@ -1,7 +1,8 @@
-package nbc.sma.repository;
+package nbc.sma.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import nbc.sma.entity.User;
+import nbc.sma.repository.UserRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;

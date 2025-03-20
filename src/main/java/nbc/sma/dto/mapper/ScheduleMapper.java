@@ -1,6 +1,6 @@
-package nbc.sma.mapper;
+package nbc.sma.dto.mapper;
 
-import nbc.sma.controller.request.CreateScheduleRequest;
+import nbc.sma.dto.request.CreateScheduleRequest;
 import nbc.sma.entity.Schedule;
 import org.springframework.stereotype.Component;
 

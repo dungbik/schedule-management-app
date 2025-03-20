@@ -1,11 +1,12 @@
-package nbc.sma.repository;
+package nbc.sma.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import nbc.sma.controller.request.ScheduleSearchCond;
-import nbc.sma.controller.response.ScheduleResponse;
-import nbc.sma.controller.response.UserResponse;
+import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.response.ScheduleResponse;
+import nbc.sma.dto.response.UserResponse;
 import nbc.sma.entity.Schedule;
-import nbc.sma.exception.custom.NotFoundException;
+import nbc.sma.exception.NotFoundException;
+import nbc.sma.repository.ScheduleRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;

@@ -1,7 +1,7 @@
-package nbc.sma.mapper;
+package nbc.sma.dto.mapper;
 
-import nbc.sma.controller.request.RegisterRequest;
-import nbc.sma.controller.response.UserResponse;
+import nbc.sma.dto.request.RegisterRequest;
+import nbc.sma.dto.response.UserResponse;
 import nbc.sma.entity.User;
 import org.springframework.stereotype.Component;
 

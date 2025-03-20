@@ -1,7 +1,7 @@
 package nbc.sma.repository;
 
-import nbc.sma.controller.request.ScheduleSearchCond;
-import nbc.sma.controller.response.ScheduleResponse;
+import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.response.ScheduleResponse;
 import nbc.sma.entity.Schedule;
 
 import java.util.List;

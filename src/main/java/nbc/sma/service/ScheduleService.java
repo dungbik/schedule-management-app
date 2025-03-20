@@ -1,17 +1,17 @@
 package nbc.sma.service;
 
 import lombok.RequiredArgsConstructor;
-import nbc.sma.controller.request.CreateScheduleRequest;
-import nbc.sma.controller.request.EditScheduleRequest;
-import nbc.sma.controller.request.ScheduleSearchCond;
-import nbc.sma.controller.response.ScheduleResponse;
-import nbc.sma.controller.response.FindSchedulesResponse;
+import nbc.sma.dto.request.CreateScheduleRequest;
+import nbc.sma.dto.request.EditScheduleRequest;
+import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.response.ScheduleResponse;
+import nbc.sma.dto.response.FindSchedulesResponse;
 import nbc.sma.entity.Schedule;
 import nbc.sma.entity.User;
-import nbc.sma.exception.custom.InvalidPasswordException;
-import nbc.sma.exception.custom.NotFoundException;
-import nbc.sma.mapper.ScheduleMapper;
-import nbc.sma.mapper.UserMapper;
+import nbc.sma.exception.InvalidPasswordException;
+import nbc.sma.exception.NotFoundException;
+import nbc.sma.dto.mapper.ScheduleMapper;
+import nbc.sma.dto.mapper.UserMapper;
 import nbc.sma.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 

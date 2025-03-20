@@ -1,4 +1,4 @@
-package nbc.sma.controller.response;
+package nbc.sma.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

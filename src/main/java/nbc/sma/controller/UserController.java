@@ -2,8 +2,8 @@ package nbc.sma.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import nbc.sma.controller.request.RegisterRequest;
-import nbc.sma.controller.response.UserResponse;
+import nbc.sma.dto.request.RegisterRequest;
+import nbc.sma.dto.response.UserResponse;
 import nbc.sma.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
