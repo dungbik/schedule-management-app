@@ -20,37 +20,38 @@ Rest Docs + Swagger 를 통해 API 를 테스트 할 수 있으며 API 문서를
 📂 nbc
 └── 📂 sma
     ├── 📂 controller                
+    │   ├── 📄 ScheduleController    
+    │   └── 📄 UserController  
+    │     
+    ├── 📂 dto    
     │   ├── 📂 request        
     │   │   ├── 📄 CreateScheduleRequest
     │   │   ├── 📄 EditScheduleRequest
-    │   │   └── 📄 RegisterRequest
+    │   │   │── 📄 RegisterRequest
     │   │   └── 📄 ScheduleSearchCond
-    │   ├── 📂 response              
+    │   │── 📂 response              
     │   │   ├── 📄 FindSchedulesResponse
     │   │   ├── 📄 ScheduleResponse
     │   │   └── 📄 UserResponse
-    │   ├── 📄 ScheduleController    
-    │   └── 📄 UserController        
+    │   └── 📂 mapper                    
+    │        ├── 📄 ScheduleMapper
+    │        └── 📄 UserMapper
     │
     ├── 📂 entity                    
     │   ├── 📄 Schedule
     │   └── 📄 User
     │
-    ├── 📂 exception                 
-    │   ├── 📂 custom                
-    │   │   ├── 📄 BizException
-    │   │   ├── 📄 InvalidPasswordException
-    │   │   └── 📄 NotFoundException
+    ├── 📂 exception                              
+    │   ├── 📄 BizException
+    │   ├── 📄 InvalidPasswordException
+    │   ├── 📄 NotFoundException
     │   ├── 📄 ErrorResponse         
     │   └── 📄 GlobalControllerAdvice
     │
-    ├── 📂 mapper                    
-    │   ├── 📄 ScheduleMapper
-    │   └── 📄 UserMapper
-    │
-    ├── 📂 repository                
-    │   ├── 📄 JdbcScheduleRepository
-    │   ├── 📄 JdbcUserRepository
+    ├── 📂 repository   
+    │   │── 📂 jdbc      
+    │   │    ├── 📄 JdbcScheduleRepository
+    │   │    └── 📄 JdbcUserRepository
     │   ├── 📄 ScheduleRepository
     │   └── 📄 UserRepository
     │
