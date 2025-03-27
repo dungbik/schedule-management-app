@@ -17,7 +17,7 @@ GET http://localhost:8080/schedules?page=2&size=5
 GET http://localhost:8080/schedules/6
 
 ###
-PUT http://localhost:8080/schedules/6/edit
+PUT http://localhost:8080/schedules/6
 Content-Type: application/json
 
 {

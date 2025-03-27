@@ -45,7 +45,7 @@ public class ScheduleController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PutMapping("/{scheduleId}/edit")
+    @PutMapping("/{scheduleId}")
     public ResponseEntity<Void> editSchedule(
             @PathVariable Long scheduleId,
             @Valid @RequestBody EditScheduleRequest req
