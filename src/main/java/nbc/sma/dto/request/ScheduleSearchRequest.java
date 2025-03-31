@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleSearchCond {
+public class ScheduleSearchRequest {
     private LocalDate updatedAt;
     private String username;
     private Long userId;

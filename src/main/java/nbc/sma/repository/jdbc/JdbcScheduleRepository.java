@@ -1,13 +1,10 @@
 package nbc.sma.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import nbc.sma.dto.request.ScheduleSearchCond;
 import nbc.sma.dto.response.ScheduleResponse;
 import nbc.sma.dto.response.UserResponse;
 import nbc.sma.entity.Schedule;
-import nbc.sma.exception.NotFoundException;
 import nbc.sma.repository.ScheduleRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -19,6 +16,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -46,18 +44,23 @@ public class JdbcScheduleRepository implements ScheduleRepository {
 
     /**
      * 검색을 수행하여 해당하는 일정 정보 목록을 반환한다.
-     * @param cond 검색 조건
+     *
+     * @param updatedAt 수정일
+     * @param username 작성자 이름
+     * @param userId 작성자 id
+     * @param page 페이지
+     * @param size 한 페이지의 일정 수
      * @return 검색 조건에 해당하는 일정 정보 목록
      */
     @Override
-    public List<ScheduleResponse> findAllResponse(ScheduleSearchCond cond) {
-        String sql = createSearchQuery(cond);
+    public List<ScheduleResponse> findAllResponse(LocalDate updatedAt, String username, Long userId, Integer page, Integer size) {
+        String sql = createSearchQuery(updatedAt, username, userId);
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("updatedAt", cond.getUpdatedAt())
-                .addValue("username", cond.getUsername())
-                .addValue("userId", cond.getUserId())
-                .addValue("limit", cond.getSize())
-                .addValue("offset", (cond.getPage() - 1) * cond.getSize());
+                .addValue("updatedAt", updatedAt)
+                .addValue("username", username)
+                .addValue("userId", userId)
+                .addValue("limit", size)
+                .addValue("offset", (page - 1) * size);
 
         return jdbcTemplate.query(sql, param, scheduleResponseRowMapper());
     }
@@ -83,11 +86,8 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     public ScheduleResponse findResponse(Long scheduleId) {
         String sql = "SELECT s.id, u.id, u.email, u.name, task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id WHERE s.id = :id";
         Map<String, Object> param = Map.of("id", scheduleId);
-        try {
-            return jdbcTemplate.queryForObject(sql, param, scheduleResponseRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("존재하지 않는 일정입니다.");
-        }
+
+        return jdbcTemplate.queryForObject(sql, param, scheduleResponseRowMapper());
     }
 
     /**
@@ -124,21 +124,23 @@ public class JdbcScheduleRepository implements ScheduleRepository {
 
     /**
      * 검색 쿼리를 동적으로 생성
-     * @param cond 검색 조건
+     * @param updatedAt 수정일
+     * @param username 작성자 이름
+     * @param userId 작성자 id
      * @return 검색을 수행하는 쿼리문
      */
-    private String createSearchQuery(ScheduleSearchCond cond) {
+    private String createSearchQuery(LocalDate updatedAt, String username, Long userId) {
         String sql = "SELECT DISTINCT s.id, u.email, u.name, s.task, s.created_at, s.updated_at FROM schedule s JOIN user u ON u.id = s.user_id";
 
-        if (StringUtils.hasText(cond.getUsername())) {
+        if (StringUtils.hasText(username)) {
             sql += " AND u.name like concat('%', :username, '%')";
         }
 
-        if (cond.getUpdatedAt() != null) {
+        if (updatedAt != null) {
             sql += " WHERE DATE(s.updated_at) = :updatedAt";
         }
 
-        if (cond.getUserId() != null) {
+        if (userId != null) {
             sql += " AND s.user_id = :userId";
         }
 

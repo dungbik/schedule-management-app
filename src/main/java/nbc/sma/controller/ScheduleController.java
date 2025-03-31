@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbc.sma.dto.request.CreateScheduleRequest;
 import nbc.sma.dto.request.EditScheduleRequest;
-import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.request.ScheduleSearchRequest;
 import nbc.sma.dto.response.ScheduleResponse;
 import nbc.sma.dto.response.FindSchedulesResponse;
 import nbc.sma.service.ScheduleService;
@@ -31,7 +31,7 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<FindSchedulesResponse> findSchedules(
-            @ModelAttribute ScheduleSearchCond cond
+            @ModelAttribute ScheduleSearchRequest cond
     ) {
         FindSchedulesResponse res = scheduleService.findSchedules(cond);
         return new ResponseEntity<>(res, HttpStatus.OK);

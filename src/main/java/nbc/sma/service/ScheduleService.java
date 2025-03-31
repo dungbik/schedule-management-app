@@ -3,7 +3,7 @@ package nbc.sma.service;
 import lombok.RequiredArgsConstructor;
 import nbc.sma.dto.request.CreateScheduleRequest;
 import nbc.sma.dto.request.EditScheduleRequest;
-import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.request.ScheduleSearchRequest;
 import nbc.sma.dto.response.ScheduleResponse;
 import nbc.sma.dto.response.FindSchedulesResponse;
 import nbc.sma.entity.Schedule;
@@ -13,6 +13,7 @@ import nbc.sma.exception.NotFoundException;
 import nbc.sma.dto.mapper.ScheduleMapper;
 import nbc.sma.dto.mapper.UserMapper;
 import nbc.sma.repository.ScheduleRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,14 +40,18 @@ public class ScheduleService {
         return new ScheduleResponse(schedule.getId(), userMapper.toResponse(user), schedule.getTask(), schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 
-    public FindSchedulesResponse findSchedules(ScheduleSearchCond cond) {
-        List<ScheduleResponse> results = scheduleRepository.findAllResponse(cond);
+    public FindSchedulesResponse findSchedules(ScheduleSearchRequest req) {
+        List<ScheduleResponse> results = scheduleRepository.findAllResponse(req.getUpdatedAt(), req.getUsername(), req.getUserId(), req.getPage(), req.getSize());
 
-        return new FindSchedulesResponse(results, results.size(), cond.getPage());
+        return new FindSchedulesResponse(results, results.size(), req.getPage());
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
-        return scheduleRepository.findResponse(scheduleId);
+        try {
+            return scheduleRepository.findResponse(scheduleId);
+        } catch (DataAccessException dae) {
+            throw new NotFoundException("존재하지 않는 일정입니다.");
+        }
     }
 
     public void editSchedule(Long scheduleId, EditScheduleRequest req) {

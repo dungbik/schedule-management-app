@@ -5,7 +5,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.epages.restdocs.apispec.SimpleType;
 import nbc.sma.dto.request.CreateScheduleRequest;
 import nbc.sma.dto.request.EditScheduleRequest;
-import nbc.sma.dto.request.ScheduleSearchCond;
+import nbc.sma.dto.request.ScheduleSearchRequest;
 import nbc.sma.dto.response.FindSchedulesResponse;
 import nbc.sma.dto.response.ScheduleResponse;
 import nbc.sma.dto.response.UserResponse;
@@ -91,7 +91,7 @@ class ScheduleControllerTest extends RestDocsTestSupport {
     void findSchedules_success() throws Exception {
 
         // given
-        ScheduleSearchCond cond = new ScheduleSearchCond(LocalDate.now(), "이름", 1L, 1, 15);
+        ScheduleSearchRequest cond = new ScheduleSearchRequest(LocalDate.now(), "이름", 1L, 1, 15);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("updatedAt", cond.getUpdatedAt().toString());
         params.add("username", cond.getUsername());
